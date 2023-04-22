@@ -1,1 +1,1 @@
-# writeups_cryptonite
+# writeups_cybersec
