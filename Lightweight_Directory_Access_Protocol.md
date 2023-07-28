@@ -82,7 +82,7 @@ For example, `"ldap://ldap.example.com/cn=John%20Doe,dc=example,dc=com"` refers 
 
 # LDAP injection
 
-LDAP injection arises when user-controllable data is copied in an unsafe way into an LDAP query that is performed by the application. If an attacker can inject LDAP metacharacters `(( ) ; , \* | & = and whitespace)` into the query, then they can interfere with the query's logic. Depending on the function for which the query is used, the attacker may be able to retrieve sensitive data to which they are not authorized, or subvert the application's logic to perform some unauthorized action.
+LDAP injection arises when user-controllable data is copied in an unsafe way into an LDAP query that is performed by the application. If an attacker can inject LDAP metacharacters `(( ) ; , \* | & = \ # + < > , " and whitespace )` into the query, then they can interfere with the query's logic. Depending on the function for which the query is used, the attacker may be able to retrieve sensitive data to which they are not authorized, or subvert the application's logic to perform some unauthorized action.
 
 ### References:
 
